@@ -1,0 +1,5 @@
+bind_addr = ":8080"
+log_level = "info"
+
+[store]
+database_url = "host=db user=postgres password=postgres dbname=mailbomber sslmode=disable"

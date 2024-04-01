@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mailbomber:
+    build: ./
+    command: ./start.sh db ./mailbomber
+    depends_on:
+      - db
+    environment:
+      - DB_PASSWORD=postgres
+      - GOOSE_DRIVER=postgres
+      - GOOSE_DBSTRING=postgres://postgres:postgres@db:5432/mailbomber_test?sslmode=disable
+    ports:
+      - "8080:8080"
+
+  db:
+    restart: always
+    image: postgres:latest
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./.database/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=mailbomber
