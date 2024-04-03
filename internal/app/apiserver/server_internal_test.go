@@ -151,3 +151,42 @@ func TestServer_HandleSessionsCreate(t *testing.T) {
 		})
 	}
 }
+
+func TestServer_HandleEmailSend(t *testing.T) {
+	s := newServer(teststore.New(), sessions.NewCookieStore([]byte("secret")))
+	testCases := []struct {
+		name         string
+		payload      interface{}
+		expectedCode int
+	}{
+		{
+			name: "valid",
+			payload: map[string]interface{}{
+				"from":     "from@example.com",
+				"to":       []string{"to@example.com"},
+				"cc":       []string{"cc@example.com"},
+				"subject":  "subject",
+				"body":     "body",
+				"bodyType": "text/html",
+				"attach":   "",
+			},
+			expectedCode: http.StatusOK,
+		},
+		{
+			name:         "invalid payload",
+			payload:      "invalid",
+			expectedCode: http.StatusBadRequest,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			rec := httptest.NewRecorder()
+			b := &bytes.Buffer{}
+			json.NewEncoder(b).Encode(tc.payload)
+			req, _ := http.NewRequest(http.MethodPost, "/private/email/send", b)
+			s.ServeHTTP(rec, req)
+			assert.Equal(t, tc.expectedCode, rec.Code)
+		})
+	}
+}
