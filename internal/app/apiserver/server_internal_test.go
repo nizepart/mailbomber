@@ -32,10 +32,8 @@ func TestServer_AuthenticateUser(t *testing.T) {
 			expectedCode: http.StatusOK,
 		},
 		{
-			name: "not authenticated",
-			cookieValue: map[interface{}]interface{}{
-				"user_id": 0,
-			},
+			name:         "not authenticated",
+			cookieValue:  nil,
 			expectedCode: http.StatusUnauthorized,
 		},
 	}
@@ -153,7 +151,13 @@ func TestServer_HandleSessionsCreate(t *testing.T) {
 }
 
 func TestServer_HandleEmailSend(t *testing.T) {
-	s := newServer(teststore.New(), sessions.NewCookieStore([]byte("secret")))
+	store := teststore.New()
+	u := model.TestUser(t)
+	store.User().Create(u)
+	secretKey := []byte("secret")
+	s := newServer(store, sessions.NewCookieStore(secretKey))
+	sc := securecookie.New(secretKey, nil)
+
 	testCases := []struct {
 		name         string
 		payload      interface{}
@@ -185,6 +189,13 @@ func TestServer_HandleEmailSend(t *testing.T) {
 			b := &bytes.Buffer{}
 			json.NewEncoder(b).Encode(tc.payload)
 			req, _ := http.NewRequest(http.MethodPost, "/private/email/send", b)
+
+			// Create a cookie session
+			cookieStr, _ := sc.Encode(sessionName, map[interface{}]interface{}{
+				"user_id": u.ID,
+			})
+			req.Header.Set("Cookie", fmt.Sprintf("%s=%s", sessionName, cookieStr))
+
 			s.ServeHTTP(rec, req)
 			assert.Equal(t, tc.expectedCode, rec.Code)
 		})
