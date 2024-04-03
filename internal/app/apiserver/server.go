@@ -8,8 +8,8 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
+	email2 "github.com/nizepart/rest-go/internal/app/email"
 	"github.com/nizepart/rest-go/internal/app/store"
-	"github.com/nizepart/rest-go/internal/email"
 	"github.com/nizepart/rest-go/model"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/gomail.v2"
@@ -35,7 +35,7 @@ type server struct {
 	logger        *logrus.Logger
 	store         store.Store
 	sessionsStore sessions.Store
-	emailService  *email.Service
+	emailService  *email2.Service
 }
 
 func newServer(store store.Store, sessionsStore sessions.Store) *server {
@@ -44,7 +44,7 @@ func newServer(store store.Store, sessionsStore sessions.Store) *server {
 		logger:        logrus.New(),
 		store:         store,
 		sessionsStore: sessionsStore,
-		emailService:  email.NewService(),
+		emailService:  email2.NewService(),
 	}
 
 	s.emailService.Start()
@@ -75,7 +75,7 @@ func (s *server) configureRouter() {
 
 func (s *server) handleEmailSend() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &email.Message{}
+		req := &email2.Message{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 			s.error(w, r, http.StatusBadRequest, err)
 			return

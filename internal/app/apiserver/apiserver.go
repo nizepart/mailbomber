@@ -18,7 +18,8 @@ func Start(config *Config) error {
 	store := sqlstore.New(db)
 	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
 	s := newServer(store, sessionStore)
-	s.emailService.Close()
+
+	defer s.emailService.Close()
 
 	return http.ListenAndServe(config.BindAddr, s)
 }

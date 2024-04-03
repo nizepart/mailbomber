@@ -2,7 +2,7 @@ package email_test
 
 import (
 	"fmt"
-	"github.com/nizepart/rest-go/internal/email"
+	"github.com/nizepart/rest-go/internal/app/email"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
