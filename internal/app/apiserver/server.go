@@ -47,6 +47,8 @@ func newServer(store store.Store, sessionsStore sessions.Store) *server {
 		emailService:  email.NewService(),
 	}
 
+	s.emailService.Start()
+
 	s.configureRouter()
 
 	return s
@@ -130,6 +132,7 @@ func (s *server) authenticateUser(next http.Handler) http.Handler {
 		id, ok := session.Values["user_id"]
 		if !ok {
 			s.error(w, r, http.StatusUnauthorized, errNotAuthenticated)
+			return
 		}
 
 		u, err := s.store.User().FindByID(id.(int))
