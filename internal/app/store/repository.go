@@ -7,3 +7,7 @@ type UserRepository interface {
 	FindByID(int) (*model.User, error)
 	FindByEmail(string) (*model.User, error)
 }
+
+type EmailTemplateRepository interface {
+	Create(*model.EmailTemplate) error
+}

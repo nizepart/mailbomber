@@ -8,9 +8,11 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
+	"github.com/nizepart/rest-go/internal/app/email_service"
 	"github.com/nizepart/rest-go/internal/app/store"
 	"github.com/nizepart/rest-go/model"
 	"github.com/sirupsen/logrus"
+	"gopkg.in/gomail.v2"
 	"net/http"
 	"time"
 )
@@ -33,6 +35,7 @@ type server struct {
 	logger        *logrus.Logger
 	store         store.Store
 	sessionsStore sessions.Store
+	emailService  *email_service.Service
 }
 
 func newServer(store store.Store, sessionsStore sessions.Store) *server {
@@ -41,7 +44,10 @@ func newServer(store store.Store, sessionsStore sessions.Store) *server {
 		logger:        logrus.New(),
 		store:         store,
 		sessionsStore: sessionsStore,
+		emailService:  email_service.NewService(),
 	}
+
+	s.emailService.Start()
 
 	s.configureRouter()
 
@@ -62,6 +68,63 @@ func (s *server) configureRouter() {
 	private := s.router.PathPrefix("/private").Subrouter()
 	private.Use(s.authenticateUser)
 	private.HandleFunc("/whoami", s.handleWhoami()).Methods("GET")
+
+	emails := private.PathPrefix("/email").Subrouter()
+	emails.HandleFunc("/send", s.handleEmailSend()).Methods("POST")
+
+	template := emails.PathPrefix("/template").Subrouter()
+	template.HandleFunc("/create", s.handleEmailTemplateCreate()).Methods("POST")
+}
+
+func (s *server) handleEmailTemplateCreate() http.HandlerFunc {
+	type request struct {
+		Subject string `json:"subject"`
+		Body    string `json:"body"`
+	}
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		req := &request{}
+		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+			s.error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		et := &model.EmailTemplate{
+			Subject: req.Subject,
+			Body:    req.Body,
+		}
+		if err := s.store.EmailTemplate().Create(et); err != nil {
+			s.error(w, r, http.StatusUnprocessableEntity, err)
+			return
+		}
+
+		s.respond(w, r, http.StatusCreated, et)
+	}
+}
+
+func (s *server) handleEmailSend() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		req := &model.Message{}
+		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+			s.error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		m := gomail.NewMessage()
+		m.SetHeader("From", req.From)
+		m.SetHeader("To", req.To...)
+		m.SetHeader("Cc", req.Cc...)
+		m.SetHeader("Subject", req.Subject)
+		m.SetBody(req.BodyType, req.Body)
+
+		if req.Attach != "" {
+			m.Attach(req.Attach)
+		}
+
+		s.emailService.Send(m)
+
+		s.respond(w, r, http.StatusOK, nil)
+	}
 }
 
 func (s *server) LogRequest(next http.Handler) http.Handler {
@@ -79,6 +142,7 @@ func (s *server) LogRequest(next http.Handler) http.Handler {
 		logger.Infof("completed with %d %s in %v", rw.code, http.StatusText(rw.code), time.Now().Sub(start))
 	})
 }
+
 func (s *server) setRequestID(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		id := uuid.New().String()
@@ -98,6 +162,7 @@ func (s *server) authenticateUser(next http.Handler) http.Handler {
 		id, ok := session.Values["user_id"]
 		if !ok {
 			s.error(w, r, http.StatusUnauthorized, errNotAuthenticated)
+			return
 		}
 
 		u, err := s.store.User().FindByID(id.(int))

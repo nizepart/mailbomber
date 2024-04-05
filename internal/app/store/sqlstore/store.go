@@ -7,8 +7,9 @@ import (
 )
 
 type Store struct {
-	db             *sql.DB
-	userRepository *UserRepository
+	db                      *sql.DB
+	userRepository          *UserRepository
+	emailTemplateRepository *EmailTemplateRepository
 }
 
 func New(db *sql.DB) *Store {
@@ -27,4 +28,16 @@ func (s *Store) User() store.UserRepository {
 	}
 
 	return s.userRepository
+}
+
+func (s *Store) EmailTemplate() store.EmailTemplateRepository {
+	if s.emailTemplateRepository != nil {
+		return s.emailTemplateRepository
+	}
+
+	s.emailTemplateRepository = &EmailTemplateRepository{
+		store: s,
+	}
+
+	return s.emailTemplateRepository
 }
