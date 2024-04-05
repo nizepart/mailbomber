@@ -1,8 +1,8 @@
-package email_test
+package model_test
 
 import (
 	"fmt"
-	"github.com/nizepart/rest-go/internal/app/email"
+	"github.com/nizepart/rest-go/model"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -10,13 +10,13 @@ import (
 func TestMessage_Validate(t *testing.T) {
 	testCases := []struct {
 		name    string
-		m       func() *email.Message
+		m       func() *model.Message
 		isValid bool
 	}{
 		{
 			name: "valid",
-			m: func() *email.Message {
-				return &email.Message{
+			m: func() *model.Message {
+				return &model.Message{
 					From:     "from@example.com",
 					To:       []string{"to@example.com"},
 					Cc:       []string{"cc@example.com"},
@@ -30,8 +30,8 @@ func TestMessage_Validate(t *testing.T) {
 		},
 		{
 			name: "invalid from",
-			m: func() *email.Message {
-				m := &email.Message{
+			m: func() *model.Message {
+				m := &model.Message{
 					From:     "",
 					To:       []string{"to@example.com"},
 					Cc:       []string{"cc@example.com"},

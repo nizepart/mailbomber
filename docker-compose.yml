@@ -9,7 +9,7 @@ services:
     environment:
       - DB_PASSWORD=postgres
       - GOOSE_DRIVER=postgres
-      - GOOSE_DBSTRING=postgres://postgres:postgres@db:5432/mailbomber_test?sslmode=disable
+      - GOOSE_DBSTRING=postgres://postgres:postgres@db:5432/mailbomber?sslmode=disable
     ports:
       - "8080:8080"
 

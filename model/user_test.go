@@ -20,7 +20,7 @@ func TestUser_Validate(t *testing.T) {
 			isValid: true,
 		},
 		{
-			name: "empty email",
+			name: "empty email_service",
 			u: func() *model.User {
 				u := model.TestUser(t)
 				u.Email = ""
