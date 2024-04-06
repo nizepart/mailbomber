@@ -1,6 +1,7 @@
 package teststore
 
 import (
+	"github.com/nizepart/rest-go/internal/app/store"
 	"github.com/nizepart/rest-go/model"
 )
 
@@ -18,4 +19,13 @@ func (r *EmailTemplateRepository) Create(et *model.EmailTemplate) error {
 	r.emailTemplates[et.ID] = et
 
 	return nil
+}
+
+func (r *EmailTemplateRepository) FindByID(id int) (*model.EmailTemplate, error) {
+	et, ok := r.emailTemplates[id]
+	if !ok {
+		return nil, store.ErrRecordNotFound
+	}
+
+	return et, nil
 }

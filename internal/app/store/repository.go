@@ -10,4 +10,5 @@ type UserRepository interface {
 
 type EmailTemplateRepository interface {
 	Create(*model.EmailTemplate) error
+	FindByID(int) (*model.EmailTemplate, error)
 }
