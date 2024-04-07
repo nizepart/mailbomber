@@ -1,5 +1,8 @@
 FROM golang:1.22-alpine
 
+#TODO
+# set date to msk
+
 # install psql
 RUN apk update && apk add postgresql-client curl
 

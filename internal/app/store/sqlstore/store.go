@@ -10,6 +10,7 @@ type Store struct {
 	db                      *sql.DB
 	userRepository          *UserRepository
 	emailTemplateRepository *EmailTemplateRepository
+	emailScheduleRepository *EmailScheduleRepository
 }
 
 func New(db *sql.DB) *Store {
@@ -40,4 +41,16 @@ func (s *Store) EmailTemplate() store.EmailTemplateRepository {
 	}
 
 	return s.emailTemplateRepository
+}
+
+func (s *Store) EmailSchedule() store.EmailScheduleRepository {
+	if s.emailScheduleRepository != nil {
+		return s.emailScheduleRepository
+	}
+
+	s.emailScheduleRepository = &EmailScheduleRepository{
+		store: s,
+	}
+
+	return s.emailScheduleRepository
 }
