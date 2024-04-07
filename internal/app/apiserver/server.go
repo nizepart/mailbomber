@@ -36,6 +36,7 @@ func newServer(store store.Store, sessionsStore sessions.Store) *server {
 	}
 
 	s.emailService.Start()
+	s.startEmailScheduler()
 
 	s.configureRouter()
 
@@ -61,9 +62,11 @@ func (s *server) configureRouter() {
 	emails.HandleFunc("/send", s.handleEmailSend()).Methods("POST")
 
 	template := emails.PathPrefix("/template").Subrouter()
+	template.HandleFunc("/schedule", s.handleEmailScheduleCreate()).Methods("POST")
 	template.HandleFunc("/create", s.handleEmailTemplateCreate()).Methods("POST")
 	template.HandleFunc("/{id}", s.handleEmailTemplateGet()).Methods("GET")
 	template.HandleFunc("/{id}/send", s.handleEmailSend()).Methods("POST")
+	//template.HandleFunc("/{id}/schedule", s.handleEmailSchedule()).Methods("POST")
 }
 
 func (s *server) LogRequest(next http.Handler) http.Handler {

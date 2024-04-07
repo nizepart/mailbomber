@@ -12,3 +12,10 @@ type EmailTemplateRepository interface {
 	Create(*model.EmailTemplate) error
 	FindByID(int) (*model.EmailTemplate, error)
 }
+
+type EmailScheduleRepository interface {
+	Create(*model.EmailSchedule) error
+	SelectExecutables() ([]*model.EmailSchedule, error)
+	UpdateExecutionTime(*model.EmailSchedule) error
+	Delete(es *model.EmailSchedule) error
+}
