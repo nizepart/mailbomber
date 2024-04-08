@@ -14,6 +14,6 @@ func (et *EmailTemplate) Validate() error {
 		et,
 		validation.Field(&et.Subject, validation.Required, validation.Length(1, 100)),
 		validation.Field(&et.Body, validation.Required),
-		validation.Field(&et.BodyType, validation.Required),
+		validation.Field(&et.BodyType, validation.Required, validation.In("text/plain", "text/html")),
 	)
 }

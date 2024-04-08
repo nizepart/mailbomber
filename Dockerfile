@@ -1,7 +1,6 @@
 FROM golang:1.22-alpine
 
-#TODO
-# set date to msk
+ENV TZ=Europe/Moscow
 
 # install psql
 RUN apk update && apk add postgresql-client curl
