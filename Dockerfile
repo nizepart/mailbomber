@@ -1,10 +1,10 @@
 FROM golang:1.22-alpine
 
-#TODO
-# set date to msk
+# install dependencies
+RUN apk update && apk add postgresql-client curl tzdata
 
-# install psql
-RUN apk update && apk add postgresql-client curl
+# set timezone
+ENV TZ=Europe/Moscow
 
 # install goose
 RUN curl -fsSL \

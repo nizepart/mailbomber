@@ -16,9 +16,9 @@ type EmailSchedule struct {
 func (es *EmailSchedule) Validate() error {
 	return validation.ValidateStruct(
 		es,
-		validation.Field(&es.EmailTemplateID, validation.Required),
-		validation.Field(&es.Recipients, validation.Required),
-		validation.Field(&es.ExecuteAfter, validation.Required),
-		validation.Field(&es.ExecutionPeriod, validation.Min(1), validation.Max(168), validation.NilOrNotEmpty),
+		validation.Field(&es.EmailTemplateID, validation.Required, validation.Min(1)),
+		validation.Field(&es.Recipients, validation.Required, validation.By(areValidEmails(es.Recipients))),
+		validation.Field(&es.ExecuteAfter, validation.Required, validation.By(isTimestamp(es.ExecuteAfter))),
+		validation.Field(&es.ExecutionPeriod, validation.Min(0), validation.Max(168)),
 	)
 }
