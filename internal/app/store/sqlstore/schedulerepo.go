@@ -2,6 +2,7 @@ package sqlstore
 
 import (
 	"github.com/nizepart/rest-go/model"
+	"strconv"
 	"time"
 )
 
@@ -43,7 +44,12 @@ func (r *EmailScheduleRepository) SelectExecutables() ([]*model.EmailSchedule, e
 }
 
 func (r *EmailScheduleRepository) UpdateExecutionTime(es *model.EmailSchedule) error {
-	return r.store.db.QueryRow("UPDATE email_schedule SET execute_after = NOW() + INTERVAL $1 HOUR WHERE id = $2", es.ExecutionPeriod, es.ID).Scan(&es.ExecutionPeriod, &es.ID)
+	query := `UPDATE email_schedule SET execute_after = NOW() + ($1 || ' HOUR')::INTERVAL WHERE id = $2`
+	_, err := r.store.db.Exec(query, strconv.Itoa(es.ExecutionPeriod), &es.ID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (r *EmailScheduleRepository) Delete(es *model.EmailSchedule) error {
