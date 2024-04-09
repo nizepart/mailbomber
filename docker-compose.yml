@@ -6,6 +6,8 @@ services:
     command: ./start.sh db ./mailbomber
     depends_on:
       - db
+    env_file:
+      - configs/.env
     environment:
       - DB_PASSWORD=postgres
       - GOOSE_DRIVER=postgres

@@ -3,12 +3,13 @@ package apiserver
 import (
 	"database/sql"
 	"github.com/gorilla/sessions"
+	"github.com/nizepart/rest-go/internal/app"
 	"github.com/nizepart/rest-go/internal/app/store/sqlstore"
 	"net/http"
 )
 
-func Start(config *Config) error {
-	db, err := newDB(config.DatabaseURL)
+func Start() error {
+	db, err := newDB(app.GetEnvString("DATABASE_URL", ""))
 	if err != nil {
 		return err
 	}
@@ -16,12 +17,12 @@ func Start(config *Config) error {
 	defer db.Close()
 
 	store := sqlstore.New(db)
-	sessionStore := sessions.NewCookieStore([]byte(config.SessionKey))
+	sessionStore := sessions.NewCookieStore([]byte(app.GetEnvString("SESSION_KEY", "")))
 	s := newServer(store, sessionStore)
 
 	defer s.emailService.Close()
 
-	return http.ListenAndServe(config.BindAddr, s)
+	return http.ListenAndServe(app.GetEnvString("BIND_ADDR", ":8080"), s)
 }
 
 func newDB(databaseURL string) (*sql.DB, error) {

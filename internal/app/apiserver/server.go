@@ -7,10 +7,12 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
+	"github.com/nizepart/rest-go/internal/app"
 	"github.com/nizepart/rest-go/internal/app/email_service"
 	"github.com/nizepart/rest-go/internal/app/store"
 	"github.com/sirupsen/logrus"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -35,11 +37,17 @@ func newServer(store store.Store, sessionsStore sessions.Store) *server {
 		emailService:  email_service.NewService(),
 	}
 
+	if err := s.configureLogger(); err != nil {
+		s.logger.Fatalf("Error configuring logger: %v", err)
+	}
+
 	s.emailService.Start()
 	s.startEmailScheduler()
+	s.logger.Info("Email service started")
 
 	s.configureRouter()
 
+	s.logger.Info("Server successfully started")
 	return s
 }
 
@@ -67,6 +75,18 @@ func (s *server) configureRouter() {
 	template.HandleFunc("/{id}", s.handleEmailTemplateGet()).Methods("GET")
 	template.HandleFunc("/{id}/send", s.handleEmailSend()).Methods("POST")
 	//template.HandleFunc("/{id}/schedule", s.handleEmailSchedule()).Methods("POST")
+}
+
+func (s *server) configureLogger() error {
+	level, err := logrus.ParseLevel(app.GetEnvString("LOG_LEVEL", "debug"))
+	if err != nil {
+		return err
+	}
+
+	s.logger.SetLevel(level)
+	s.logger.SetOutput(os.Stdout)
+
+	return nil
 }
 
 func (s *server) LogRequest(next http.Handler) http.Handler {

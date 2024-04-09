@@ -3,9 +3,6 @@ FROM golang:1.22-alpine
 # install dependencies
 RUN apk update && apk add postgresql-client curl tzdata
 
-# set timezone
-ENV TZ=Europe/Moscow
-
 # install goose
 RUN curl -fsSL \
         https://raw.githubusercontent.com/pressly/goose/master/install.sh |\

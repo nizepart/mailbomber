@@ -36,6 +36,7 @@ func (s *server) handleEmailTemplateCreate() http.HandlerFunc {
 			return
 		}
 
+		s.logger.Info("Email template created")
 		s.respond(w, r, http.StatusCreated, et)
 	}
 }
@@ -66,11 +67,13 @@ func (s *server) handleEmailScheduleCreate() http.HandlerFunc {
 			ExecuteAfter:    req.ExecuteAfter,
 			ExecutionPeriod: executionPeriod,
 		}
+
 		if err := s.store.EmailSchedule().Create(es); err != nil {
 			s.error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
 
+		s.logger.Infof("Email schedule created to be executed after %v", req.ExecuteAfter)
 		s.respond(w, r, http.StatusCreated, es)
 	}
 }
@@ -112,6 +115,7 @@ func (s *server) sendEmail(req *model.Message) {
 		m.Attach(req.Attach)
 	}
 
+	s.logger.Infof("Sending email to %v", req.To)
 	s.emailService.Send(m)
 }
 
@@ -146,6 +150,7 @@ func (s *server) handleEmailSend() http.HandlerFunc {
 
 		s.sendEmail(req)
 
+		s.logger.Infof("Email sent to %v", req.To)
 		s.respond(w, r, http.StatusOK, nil)
 	}
 }
