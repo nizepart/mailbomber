@@ -3,15 +3,11 @@ version: '3.8'
 services:
   mailbomber:
     build: ./
-    command: ./start.sh db ./mailbomber
+    command: ./start.sh ./mailbomber
     depends_on:
       - db
     env_file:
       - configs/.env
-    environment:
-      - DB_PASSWORD=postgres
-      - GOOSE_DRIVER=postgres
-      - GOOSE_DBSTRING=postgres://postgres:postgres@db:5432/mailbomber?sslmode=disable
     ports:
       - "8080:8080"
 

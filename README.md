@@ -107,13 +107,19 @@ the `os` package and can be accessed using `os.Getenv`.
 
 Here is a brief description of each variable:
 
-| Environment Variable | Fallback Value                                                            | Description                                                                                       |
-|----------------------|---------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
-| `BIND_ADDR`          | `:8080`                                                                   | The address and port on which your application will run.                                          |
-| `LOG_LEVEL`          | `info`                                                                    | The logging level for your application.                                                           |
-| `DATABASE_URL`       | `host=db user=postgres password=postgres dbname=postgres sslmode=disable` | The connection string for your database.                                                          |
-| `SESSION_KEY`        | `1234567890`                                                              | The key used for session management in your application.                                          |
-| `SMTP_HOST`          | `localhost`                                                               | The host address of your SMTP server for sending emails.                                          |
-| `SMTP_PORT`          | `1025`                                                                    | The port of your SMTP server.                                                                     |
-| `SMTP_FROM`          | `mailbomber@example.org`                                                  | The default email address that will be used as the sender in the emails sent by your application. |
-| `TZ`                 | `Europe/Moscow`                                                           | The timezone that will be used in your application.                                               |
+| Environment Variable | Fallback Value                                                                   | Description                                                                                       |
+|----------------------|----------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| `BIND_ADDR`          | `:8080`                                                                          | The address and port on which your application will run.                                          |
+| `LOG_LEVEL`          | `debug`                                                                          | The logging level for your application.                                                           |
+| `SESSION_KEY`        | `1234567890`                                                                     | The key used for session management in your application.                                          |
+| `SMTP_HOST`          | `localhost`                                                                      | The host address of your SMTP server for sending emails.                                          |
+| `SMTP_PORT`          | `587`                                                                            | The port of your SMTP server.                                                                     |
+| `SMTP_FROM`          | `noreply@localhost`                                                              | The default email address that will be used as the sender in the emails sent by your application. |
+| `TZ`                 | `UTC`                                                                            | The timezone that will be used in your application.                                               |
+| `DB_PASSWORD`        |                                                                                  | The password for your database.                                                                   |
+| `DB_USER`            |                                                                                  | The username for your database.                                                                   |
+| `DB_NAME`            |                                                                                  | The name of your database.                                                                        |
+| `DB_HOST`            |                                                                                  | The host of your database.                                                                        |
+| `DATABASE_TEST_URL`  | `host=db user=postgres password=postgres dbname=mailbomber_test sslmode=disable` | The connection string for your test database.                                                     |
+| `GOOSE_DRIVER`       |                                                                                  | The driver used by Goose for database migrations.                                                 |
+| `GOOSE_DBSTRING`     |                                                                                  | The connection string used by Goose for database migrations.                                      |

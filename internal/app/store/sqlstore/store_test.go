@@ -11,6 +11,6 @@ var (
 )
 
 func TestMain(m *testing.M) {
-	databaseURL = app.GetEnvString("DATABASE_TEST_URL", "host=db user=postgres password=postgres dbname=mailbomber_test sslmode=disable")
+	databaseURL = app.GetEnvString("DB_TEST_URL", "host=db user=postgres password=postgres dbname=mailbomber_test sslmode=disable")
 	os.Exit(m.Run())
 }
