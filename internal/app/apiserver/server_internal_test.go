@@ -150,6 +150,8 @@ func TestServer_HandleSessionsCreate(t *testing.T) {
 	}
 }
 
+// TODO
+// test send real emails, lol, fix it
 func TestServer_HandleEmailSend(t *testing.T) {
 	store := teststore.New()
 	u := model.TestUser(t)
@@ -166,13 +168,21 @@ func TestServer_HandleEmailSend(t *testing.T) {
 		{
 			name: "valid",
 			payload: map[string]interface{}{
-				"from":     "from@example.com",
 				"to":       []string{"to@example.com"},
 				"cc":       []string{"cc@example.com"},
 				"subject":  "subject",
 				"body":     "body",
 				"bodyType": "text/html",
 				"attach":   "",
+			},
+			expectedCode: http.StatusOK,
+		},
+		{
+			name: "valid without cc, subject and attach",
+			payload: map[string]interface{}{
+				"to":       []string{"to@example.com"},
+				"body":     "body",
+				"bodyType": "text/html",
 			},
 			expectedCode: http.StatusOK,
 		},

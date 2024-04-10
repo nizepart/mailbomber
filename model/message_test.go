@@ -17,7 +17,6 @@ func TestMessage_Validate(t *testing.T) {
 			name: "valid",
 			m: func() *model.Message {
 				return &model.Message{
-					From:     "from@example.com",
 					To:       []string{"to@example.com"},
 					Cc:       []string{"cc@example.com"},
 					Subject:  "subject",
@@ -27,22 +26,6 @@ func TestMessage_Validate(t *testing.T) {
 				}
 			},
 			isValid: true,
-		},
-		{
-			name: "invalid from",
-			m: func() *model.Message {
-				m := &model.Message{
-					From:     "",
-					To:       []string{"to@example.com"},
-					Cc:       []string{"cc@example.com"},
-					Subject:  "subject",
-					Body:     "body",
-					BodyType: "text/html",
-					Attach:   "",
-				}
-				return m
-			},
-			isValid: false,
 		},
 	}
 

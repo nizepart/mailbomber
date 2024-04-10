@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/gorilla/mux"
+	"github.com/nizepart/rest-go/internal/app"
 	"github.com/nizepart/rest-go/model"
 	"gopkg.in/gomail.v2"
 	"net/http"
@@ -105,7 +106,7 @@ func (s *server) handleEmailTemplateGet() http.HandlerFunc {
 
 func (s *server) sendEmail(req *model.Message) {
 	m := gomail.NewMessage()
-	m.SetHeader("From", req.From)
+	m.SetHeader("From", app.GetEnvString("SMTP_FROM", "noreply@localhost"))
 	m.SetHeader("To", req.To...)
 	m.SetHeader("Cc", req.Cc...)
 	m.SetHeader("Subject", req.Subject)
@@ -174,7 +175,6 @@ func (s *server) startEmailScheduler() {
 				recipients := strings.Split(schedule.Recipients, ",")
 
 				msg := &model.Message{
-					From:     "trapez@example.org",
 					To:       recipients,
 					Subject:  template.Subject,
 					Body:     template.Body,
