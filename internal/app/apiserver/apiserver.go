@@ -9,7 +9,7 @@ import (
 )
 
 func Start() error {
-	db, err := newDB(app.GetEnvString("DATABASE_URL", ""))
+	db, err := newDB(app.GetEnvString("host=$DB_HOST user=$DB_USER password=$DB_PASSWORD dbname=$DB_NAME sslmode=disable", ""))
 	if err != nil {
 		return err
 	}
