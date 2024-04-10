@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/gorilla/mux"
+	"github.com/nizepart/rest-go/internal/app"
 	"github.com/nizepart/rest-go/model"
 	"gopkg.in/gomail.v2"
 	"net/http"
@@ -36,6 +37,7 @@ func (s *server) handleEmailTemplateCreate() http.HandlerFunc {
 			return
 		}
 
+		s.logger.Info("Email template created")
 		s.respond(w, r, http.StatusCreated, et)
 	}
 }
@@ -66,11 +68,13 @@ func (s *server) handleEmailScheduleCreate() http.HandlerFunc {
 			ExecuteAfter:    req.ExecuteAfter,
 			ExecutionPeriod: executionPeriod,
 		}
+
 		if err := s.store.EmailSchedule().Create(es); err != nil {
 			s.error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
 
+		s.logger.Infof("Email schedule created to be executed after %v", req.ExecuteAfter)
 		s.respond(w, r, http.StatusCreated, es)
 	}
 }
@@ -102,7 +106,7 @@ func (s *server) handleEmailTemplateGet() http.HandlerFunc {
 
 func (s *server) sendEmail(req *model.Message) {
 	m := gomail.NewMessage()
-	m.SetHeader("From", req.From)
+	m.SetHeader("From", app.GetEnvString("SMTP_FROM", "noreply@localhost"))
 	m.SetHeader("To", req.To...)
 	m.SetHeader("Cc", req.Cc...)
 	m.SetHeader("Subject", req.Subject)
@@ -112,6 +116,7 @@ func (s *server) sendEmail(req *model.Message) {
 		m.Attach(req.Attach)
 	}
 
+	s.logger.Infof("Sending email to %v", req.To)
 	s.emailService.Send(m)
 }
 
@@ -146,6 +151,7 @@ func (s *server) handleEmailSend() http.HandlerFunc {
 
 		s.sendEmail(req)
 
+		s.logger.Infof("Email sent to %v", req.To)
 		s.respond(w, r, http.StatusOK, nil)
 	}
 }
@@ -169,7 +175,6 @@ func (s *server) startEmailScheduler() {
 				recipients := strings.Split(schedule.Recipients, ",")
 
 				msg := &model.Message{
-					From:     "trapez@example.org",
 					To:       recipients,
 					Subject:  template.Subject,
 					Body:     template.Body,

@@ -4,6 +4,7 @@ import (
 	"errors"
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
+	"github.com/nizepart/rest-go/internal/app"
 	"strings"
 	"time"
 )
@@ -17,21 +18,26 @@ func requiredIf(cond bool) validation.RuleFunc {
 	}
 }
 
-func isTimestamp(t time.Time) validation.RuleFunc {
+func isValidTimestamp() validation.RuleFunc {
 	return func(value interface{}) error {
-		if _, ok := value.(time.Time); !ok {
-			return errors.New("must be a valid timestamp")
-		}
-		if t.Before(time.Now()) {
-			return errors.New("ExecuteAfter must be later than or equal to the current time")
+		if valueTime, ok := value.(time.Time); ok {
+			location, _ := time.LoadLocation(app.GetEnvString("TZ", "UTC"))
+			if valueTime.Location().String() != location.String() {
+				return errors.New("ExecuteAfter must be in server timezone")
+			}
+			if valueTime.Before(time.Now()) {
+				return errors.New("ExecuteAfter must be later than or equal to the current time")
+			}
+		} else {
+			return errors.New("Must be a valid timestamp")
 		}
 		return nil
 	}
 }
 
-func areValidEmails(recipients string) validation.RuleFunc {
+func areValidEmails() validation.RuleFunc {
 	return func(value interface{}) error {
-		emailList := strings.Split(recipients, ",")
+		emailList := strings.Split(value.(string), ",")
 		for _, email := range emailList {
 			email = strings.TrimSpace(email)
 			if err := validation.Validate(email, is.Email); err != nil {

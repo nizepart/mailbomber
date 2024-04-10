@@ -73,6 +73,8 @@ func (s *server) handleUsersCreate() http.HandlerFunc {
 		}
 
 		u.Sanitize()
+
+		s.logger.Infof("User %s created", u.Email)
 		s.respond(w, r, http.StatusCreated, u)
 	}
 }
@@ -107,7 +109,7 @@ func (s *server) handleSessionsCreate() http.HandlerFunc {
 			return
 		}
 
+		s.logger.Infof("User %s authenticated", u.Email)
 		s.respond(w, r, http.StatusOK, nil)
-
 	}
 }

@@ -1,6 +1,7 @@
 package email_service
 
 import (
+	"github.com/nizepart/rest-go/internal/app"
 	"gopkg.in/gomail.v2"
 	"log"
 	"time"
@@ -18,7 +19,7 @@ func NewService() *Service {
 
 func (s *Service) Start() {
 	go func() {
-		d := gomail.NewDialer("mailcatcher", 1025, "", "")
+		d := gomail.NewDialer(app.GetEnvString("SMTP_HOST", "localhost"), app.GetEnvInt("SMTP_PORT", 587), "", "")
 
 		var sender gomail.SendCloser
 		var err error

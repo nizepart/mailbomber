@@ -1,4 +1,0 @@
-bind_addr = ":8080"
-log_level = "info"
-database_url = "host=db user=postgres password=postgres dbname=mailbomber sslmode=disable"
-session_key = "cR0B15a4m9Qgn1BVUb3RzFg7QdGH0Map59CCjaf9R3X84pIsp4jfFCenhfqDo2EL8sNOyXm482qRRUkt75r5z0xN7cZCQS4SD43R"

@@ -44,7 +44,7 @@ func (r *EmailScheduleRepository) SelectExecutables() ([]*model.EmailSchedule, e
 }
 
 func (r *EmailScheduleRepository) UpdateExecutionTime(es *model.EmailSchedule) error {
-	query := `UPDATE email_schedule SET execute_after = NOW() + ($1 || ' HOUR')::INTERVAL WHERE id = $2`
+	query := `UPDATE email_schedule SET execute_after = execute_after + ($1 || ' HOUR')::INTERVAL WHERE id = $2`
 	_, err := r.store.db.Exec(query, strconv.Itoa(es.ExecutionPeriod), &es.ID)
 	if err != nil {
 		return err
