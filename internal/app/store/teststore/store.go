@@ -34,7 +34,8 @@ func (s *Store) EmailTemplate() store.EmailTemplateRepository {
 	}
 
 	s.emailTemplateRepository = &EmailTemplateRepository{
-		store: s,
+		store:          s,
+		emailTemplates: make(map[int]*model.EmailTemplate),
 	}
 
 	return s.emailTemplateRepository
@@ -46,7 +47,8 @@ func (s *Store) EmailSchedule() store.EmailScheduleRepository {
 	}
 
 	s.emailScheduleRepository = &EmailScheduleRepository{
-		store: s,
+		store:          s,
+		emailSchedules: make(map[int]*model.EmailSchedule),
 	}
 
 	return s.emailScheduleRepository
