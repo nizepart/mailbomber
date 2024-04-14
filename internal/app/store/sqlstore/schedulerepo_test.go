@@ -22,6 +22,7 @@ func TestEmailScheduleRepository_Create(t *testing.T) {
 	assert.NotNil(t, es)
 }
 
+// TODO: I don't know how to check the SelectExecutables function because of model validation
 func TestEmailScheduleRepository_SelectExecutables(t *testing.T) {
 	db, teardown := sqlstore.TestDB(t, databaseURL)
 	defer teardown("email_schedule")
@@ -31,11 +32,31 @@ func TestEmailScheduleRepository_SelectExecutables(t *testing.T) {
 	s.EmailTemplate().Create(et)
 	es := model.TestEmailSchedule(t)
 	es.EmailTemplateID = et.ID
-	location, _ := time.LoadLocation(app.GetEnvString("TZ", "UTC"))
-	es.ExecuteAfter = time.Now().In(location).Add(-6 * time.Minute)
-	s.EmailSchedule().Create(es)
+	location, _ := time.LoadLocation(app.GetEnvString("TZ", "Europe/Moscow"))
+	es.ExecuteAfter = time.Now().In(location).Add(time.Hour)
+	errCreateSchedule := s.EmailSchedule().Create(es)
+	assert.NoError(t, errCreateSchedule)
 
 	_, err := s.EmailSchedule().SelectExecutables()
 	assert.NoError(t, err)
 	assert.NotNil(t, es)
+}
+
+func TestEmailScheduleRepository_UpdateExecutionTime(t *testing.T) {
+	db, teardown := sqlstore.TestDB(t, databaseURL)
+	defer teardown("email_schedule")
+	s := sqlstore.New(db)
+
+	et := model.TestEmailTemplate(t)
+	s.EmailTemplate().Create(et)
+	es := model.TestEmailSchedule(t)
+	es.EmailTemplateID = et.ID
+	location, _ := time.LoadLocation(app.GetEnvString("TZ", "Europe/Moscow"))
+	es.ExecuteAfter = time.Now().In(location).Add(time.Hour)
+	errCreateSchedule := s.EmailSchedule().Create(es)
+	assert.NoError(t, errCreateSchedule)
+	timeBefore := es.ExecuteAfter
+	err := s.EmailSchedule().UpdateExecutionTime(es)
+	assert.NoError(t, err)
+	assert.Greater(t, es.ExecuteAfter, timeBefore)
 }
