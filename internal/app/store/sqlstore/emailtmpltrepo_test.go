@@ -10,8 +10,8 @@ import (
 func TestEmailTemplateRepository_Create(t *testing.T) {
 	db, teardown := sqlstore.TestDB(t, databaseURL)
 	defer teardown("email_templates")
-
 	s := sqlstore.New(db)
+
 	et := model.TestEmailTemplate(t)
 	assert.NoError(t, s.EmailTemplate().Create(et))
 	assert.NotNil(t, et)
@@ -20,11 +20,11 @@ func TestEmailTemplateRepository_Create(t *testing.T) {
 func TestEmailTemplateRepository_FindByID(t *testing.T) {
 	db, teardown := sqlstore.TestDB(t, databaseURL)
 	defer teardown("email_templates")
-
 	s := sqlstore.New(db)
+
 	et := model.TestEmailTemplate(t)
 	s.EmailTemplate().Create(et)
-	et, err := s.EmailTemplate().FindByID(et.ID)
+	etFound, err := s.EmailTemplate().FindByID(et.ID)
 	assert.NoError(t, err)
-	assert.NotNil(t, et)
+	assert.Equal(t, et, etFound)
 }

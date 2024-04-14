@@ -23,7 +23,7 @@ func TestEmailTemplate(t *testing.T) *EmailTemplate {
 }
 
 func TestEmailSchedule(t *testing.T) *EmailSchedule {
-	location, _ := time.LoadLocation(app.GetEnvString("TZ", "UTC"))
+	location, _ := time.LoadLocation(app.GetEnvString("TZ", "Europe/Moscow"))
 	return &EmailSchedule{
 		EmailTemplateID: 1,
 		Recipients:      "email@example.org",
