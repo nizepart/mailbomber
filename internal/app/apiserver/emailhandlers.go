@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/gorilla/mux"
 	"github.com/nizepart/rest-go/internal/app"
-	"github.com/nizepart/rest-go/model"
+	"github.com/nizepart/rest-go/internal/app/model"
 	"gopkg.in/gomail.v2"
 	"net/http"
 	"strconv"

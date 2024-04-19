@@ -1,6 +1,8 @@
 package store
 
-import "github.com/nizepart/rest-go/model"
+import (
+	"github.com/nizepart/rest-go/internal/app/model"
+)
 
 type UserRepository interface {
 	Create(*model.User) error

@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/nizepart/rest-go/model"
+	"github.com/nizepart/rest-go/internal/app/model"
 	"net/http"
 )
 

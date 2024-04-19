@@ -2,7 +2,7 @@ package teststore
 
 import (
 	"fmt"
-	"github.com/nizepart/rest-go/model"
+	"github.com/nizepart/rest-go/internal/app/model"
 	"time"
 )
 
