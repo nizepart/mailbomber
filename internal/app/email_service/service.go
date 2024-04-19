@@ -19,7 +19,7 @@ func NewService() *Service {
 
 func (s *Service) Start() {
 	go func() {
-		d := gomail.NewDialer(app.GetEnvString("SMTP_HOST", "localhost"), app.GetEnvInt("SMTP_PORT", 587), "", "")
+		d := gomail.NewDialer(app.GetValue("SMTP_HOST", "localhost").String(), app.GetValue("SMTP_PORT", "587").Int(), "", "")
 
 		var sender gomail.SendCloser
 		var err error

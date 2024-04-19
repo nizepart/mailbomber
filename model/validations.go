@@ -21,7 +21,7 @@ func requiredIf(cond bool) validation.RuleFunc {
 func isValidTimestamp() validation.RuleFunc {
 	return func(value interface{}) error {
 		if valueTime, ok := value.(time.Time); ok {
-			location, _ := time.LoadLocation(app.GetEnvString("TZ", "Europe/Moscow"))
+			location, _ := time.LoadLocation(app.GetValue("TZ", "Europe/Moscow").String())
 			if valueTime.Location().String() != location.String() {
 				return errors.New("ExecuteAfter must be in server timezone")
 			}

@@ -106,7 +106,7 @@ func (s *server) handleEmailTemplateGet() http.HandlerFunc {
 
 func (s *server) sendEmail(req *model.Message) {
 	m := gomail.NewMessage()
-	m.SetHeader("From", app.GetEnvString("SMTP_FROM", "noreply@localhost"))
+	m.SetHeader("From", app.GetValue("SMTP_FROM", "noreply@localhost").String())
 	m.SetHeader("To", req.To...)
 	m.SetHeader("Cc", req.Cc...)
 	m.SetHeader("Subject", req.Subject)
@@ -164,6 +164,7 @@ func (s *server) startEmailScheduler() {
 				s.logger.Error(err)
 				continue
 			}
+			s.logger.Debugf("Checking for email schedules. Found %d schedules", len(schedules))
 
 			for _, schedule := range schedules {
 				template, err := s.store.EmailTemplate().FindByID(schedule.EmailTemplateID)

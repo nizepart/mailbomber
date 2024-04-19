@@ -9,7 +9,7 @@ import (
 )
 
 func Start() error {
-	db, err := newDB(app.GetEnvString("host=$DB_HOST user=$DB_USER password=$DB_PASSWORD dbname=$DB_NAME sslmode=disable", ""))
+	db, err := newDB(app.GetValue("DB_URL", "").String())
 	if err != nil {
 		return err
 	}
@@ -17,12 +17,12 @@ func Start() error {
 	defer db.Close()
 
 	store := sqlstore.New(db)
-	sessionStore := sessions.NewCookieStore([]byte(app.GetEnvString("SESSION_KEY", "")))
+	sessionStore := sessions.NewCookieStore([]byte(app.GetValue("SESSION_KEY", "").String()))
 	s := newServer(store, sessionStore)
 
 	defer s.emailService.Close()
 
-	return http.ListenAndServe(app.GetEnvString("BIND_ADDR", ":8080"), s)
+	return http.ListenAndServe(app.GetValue("BIND_ADDR", ":8080").String(), s)
 }
 
 func newDB(databaseURL string) (*sql.DB, error) {
