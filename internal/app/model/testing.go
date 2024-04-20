@@ -2,9 +2,10 @@ package model
 
 import (
 	"fmt"
-	"github.com/nizepart/rest-go/internal/app"
 	"testing"
 	"time"
+
+	"github.com/nizepart/rest-go/internal/app"
 )
 
 func TestUser(t *testing.T) *User {

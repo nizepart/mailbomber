@@ -2,9 +2,10 @@ package model_test
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/nizepart/rest-go/internal/app/model"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestMessage_Validate(t *testing.T) {

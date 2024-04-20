@@ -3,6 +3,10 @@ package apiserver
 import (
 	"context"
 	"encoding/json"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -11,9 +15,6 @@ import (
 	"github.com/nizepart/rest-go/internal/app/email_service"
 	"github.com/nizepart/rest-go/internal/app/store"
 	"github.com/sirupsen/logrus"
-	"net/http"
-	"os"
-	"time"
 )
 
 const (

@@ -1,9 +1,10 @@
 package sqlstore
 
 import (
-	"github.com/nizepart/rest-go/internal/app/model"
 	"strconv"
 	"time"
+
+	"github.com/nizepart/rest-go/internal/app/model"
 )
 
 type EmailScheduleRepository struct {

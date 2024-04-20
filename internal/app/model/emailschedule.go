@@ -1,8 +1,9 @@
 package model
 
 import (
-	validation "github.com/go-ozzo/ozzo-validation"
 	"time"
+
+	validation "github.com/go-ozzo/ozzo-validation"
 )
 
 type EmailSchedule struct {

@@ -1,11 +1,12 @@
 package teststore_test
 
 import (
+	"testing"
+
 	"github.com/nizepart/rest-go/internal/app/model"
 	"github.com/nizepart/rest-go/internal/app/store"
 	"github.com/nizepart/rest-go/internal/app/store/teststore"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestUserRepository_Create(t *testing.T) {

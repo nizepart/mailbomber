@@ -2,11 +2,12 @@ package model
 
 import (
 	"errors"
+	"strings"
+	"time"
+
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
 	"github.com/nizepart/rest-go/internal/app"
-	"strings"
-	"time"
 )
 
 func requiredIf(cond bool) validation.RuleFunc {
