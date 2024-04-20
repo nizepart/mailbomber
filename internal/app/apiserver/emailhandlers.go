@@ -14,68 +14,38 @@ import (
 )
 
 func (s *server) handleEmailTemplateCreate() http.HandlerFunc {
-	type request struct {
-		Subject  string `json:"subject"`
-		Body     string `json:"body"`
-		BodyType string `json:"body_type"`
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &request{}
+		req := &model.EmailTemplate{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 			s.error(w, r, http.StatusBadRequest, err)
 			return
 		}
 
-		et := &model.EmailTemplate{
-			Subject:  req.Subject,
-			Body:     req.Body,
-			BodyType: req.BodyType,
-		}
-		if err := s.store.EmailTemplate().Create(et); err != nil {
+		if err := s.store.EmailTemplate().Create(req); err != nil {
 			s.error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
 
 		s.logger.Info("Email template created")
-		s.respond(w, r, http.StatusCreated, et)
+		s.respond(w, r, http.StatusCreated, req)
 	}
 }
 
 func (s *server) handleEmailScheduleCreate() http.HandlerFunc {
-	type request struct {
-		EmailTemplateID int       `json:"email_template_id"`
-		Recipients      string    `json:"recipients"`
-		ExecuteAfter    time.Time `json:"execute_after"`
-		ExecutionPeriod *int      `json:"execution_period"`
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &request{}
+		req := &model.EmailSchedule{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 			s.error(w, r, http.StatusBadRequest, err)
 			return
 		}
 
-		executionPeriod := 0
-		if req.ExecutionPeriod != nil {
-			executionPeriod = *req.ExecutionPeriod
-		}
-
-		es := &model.EmailSchedule{
-			EmailTemplateID: req.EmailTemplateID,
-			Recipients:      req.Recipients,
-			ExecuteAfter:    req.ExecuteAfter,
-			ExecutionPeriod: executionPeriod,
-		}
-
-		if err := s.store.EmailSchedule().Create(es); err != nil {
+		if err := s.store.EmailSchedule().Create(req); err != nil {
 			s.error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
 
 		s.logger.Infof("Email schedule created to be executed after %v", req.ExecuteAfter)
-		s.respond(w, r, http.StatusCreated, es)
+		s.respond(w, r, http.StatusCreated, req)
 	}
 }
 
