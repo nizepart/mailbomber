@@ -1,9 +1,10 @@
 package sqlstore_test
 
 import (
-	"github.com/nizepart/rest-go/internal/app"
 	"os"
 	"testing"
+
+	"github.com/nizepart/rest-go/internal/app"
 )
 
 var (

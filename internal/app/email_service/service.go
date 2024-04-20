@@ -1,10 +1,11 @@
 package email_service
 
 import (
-	"github.com/nizepart/rest-go/internal/app"
-	"gopkg.in/gomail.v2"
 	"log"
 	"time"
+
+	"github.com/nizepart/rest-go/internal/app"
+	"gopkg.in/gomail.v2"
 )
 
 type Service struct {

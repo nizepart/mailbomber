@@ -1,9 +1,10 @@
 package model_test
 
 import (
+	"testing"
+
 	"github.com/nizepart/rest-go/internal/app/model"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestUser_Validate(t *testing.T) {

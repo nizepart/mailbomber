@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/nizepart/rest-go/internal/app/apiserver"
 	"log"
+
+	"github.com/nizepart/rest-go/internal/app/apiserver"
 )
 
 func main() {

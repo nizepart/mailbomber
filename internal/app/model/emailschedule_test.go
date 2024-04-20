@@ -1,10 +1,11 @@
 package model_test
 
 import (
-	"github.com/nizepart/rest-go/internal/app/model"
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/nizepart/rest-go/internal/app/model"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEmailSchedule_Validate(t *testing.T) {

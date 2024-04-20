@@ -1,10 +1,11 @@
 package sqlstore_test
 
 import (
+	"testing"
+
 	"github.com/nizepart/rest-go/internal/app/model"
 	"github.com/nizepart/rest-go/internal/app/store/sqlstore"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestEmailTemplateRepository_Create(t *testing.T) {

@@ -2,10 +2,11 @@ package apiserver
 
 import (
 	"database/sql"
+	"net/http"
+
 	"github.com/gorilla/sessions"
 	"github.com/nizepart/rest-go/internal/app"
 	"github.com/nizepart/rest-go/internal/app/store/sqlstore"
-	"net/http"
 )
 
 func Start() error {

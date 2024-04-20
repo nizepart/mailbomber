@@ -4,8 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/nizepart/rest-go/internal/app/model"
 	"net/http"
+
+	"github.com/nizepart/rest-go/internal/app/model"
 )
 
 const (
