@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/nizepart/rest-go/model"
+	"github.com/nizepart/rest-go/internal/app/model"
 	"net/http"
 )
 
@@ -51,42 +51,28 @@ func (s *server) handleWhoami() http.HandlerFunc {
 }
 
 func (s *server) handleUsersCreate() http.HandlerFunc {
-	type request struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &request{}
+		req := &model.User{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 			s.error(w, r, http.StatusBadRequest, err)
 			return
 		}
 
-		u := &model.User{
-			Email:    req.Email,
-			Password: req.Password,
-		}
-		if err := s.store.User().Create(u); err != nil {
+		if err := s.store.User().Create(req); err != nil {
 			s.error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
 
-		u.Sanitize()
+		req.Sanitize()
 
-		s.logger.Infof("User %s created", u.Email)
-		s.respond(w, r, http.StatusCreated, u)
+		s.logger.Infof("User %s created", req.Email)
+		s.respond(w, r, http.StatusCreated, req)
 	}
 }
 
 func (s *server) handleSessionsCreate() http.HandlerFunc {
-	type request struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &request{}
+		req := &model.User{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 			s.error(w, r, http.StatusBadRequest, err)
 			return

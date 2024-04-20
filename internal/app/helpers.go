@@ -5,17 +5,22 @@ import (
 	"strconv"
 )
 
-func GetEnvString(key string, fallback string) string {
-	if value, ok := os.LookupEnv(key); ok {
-		return value
-	}
-	return fallback
+type Value struct {
+	value string
 }
 
-func GetEnvInt(key string, fallback int) int {
+func (v *Value) String() string {
+	return v.value
+}
+
+func (v *Value) Int() int {
+	value, _ := strconv.Atoi(v.value)
+	return value
+}
+
+func GetValue(key string, fallback string) *Value {
 	if value, ok := os.LookupEnv(key); ok {
-		value, _ := strconv.Atoi(value)
-		return value
+		return &Value{value: value}
 	}
-	return fallback
+	return &Value{value: fallback}
 }

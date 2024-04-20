@@ -60,7 +60,7 @@
 { 
     "template_id": "<email template id>",
     "recipients": "<recipient email>, ...",
-    "execute_after": "<datetime>",
+    "execute_after": "<datetime>", // "2024-04-19T23:40:00+03:00"
     "execution_period": "<hours>" // optional 
 }
 ```
@@ -120,6 +120,7 @@ Here is a brief description of each variable:
 | `DB_USER`            |                                                                                  | The username for your database.                                                                   |
 | `DB_NAME`            |                                                                                  | The name of your database.                                                                        |
 | `DB_HOST`            |                                                                                  | The host of your database.                                                                        |
-| `DATABASE_TEST_URL`  | `host=db user=postgres password=postgres dbname=mailbomber_test sslmode=disable` | The connection string for your test database.                                                     |
+| `DB_TEST_URL`        | `host=db user=postgres password=postgres dbname=mailbomber_test sslmode=disable` | The connection string for your test database.                                                     |
+| `DB_URL`             | `host=db user=postgres password=postgres dbname=mailbomber sslmode=disable`      | The connection string for your database.                                                          |
 | `GOOSE_DRIVER`       |                                                                                  | The driver used by Goose for database migrations.                                                 |
 | `GOOSE_DBSTRING`     |                                                                                  | The connection string used by Goose for database migrations.                                      |

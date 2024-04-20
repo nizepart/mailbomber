@@ -2,8 +2,8 @@ package sqlstore
 
 import (
 	"database/sql"
+	"github.com/nizepart/rest-go/internal/app/model"
 	"github.com/nizepart/rest-go/internal/app/store"
-	"github.com/nizepart/rest-go/model"
 )
 
 type UserRepository struct {

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/gorilla/mux"
 	"github.com/nizepart/rest-go/internal/app"
-	"github.com/nizepart/rest-go/model"
+	"github.com/nizepart/rest-go/internal/app/model"
 	"gopkg.in/gomail.v2"
 	"net/http"
 	"strconv"
@@ -14,68 +14,38 @@ import (
 )
 
 func (s *server) handleEmailTemplateCreate() http.HandlerFunc {
-	type request struct {
-		Subject  string `json:"subject"`
-		Body     string `json:"body"`
-		BodyType string `json:"body_type"`
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &request{}
+		req := &model.EmailTemplate{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 			s.error(w, r, http.StatusBadRequest, err)
 			return
 		}
 
-		et := &model.EmailTemplate{
-			Subject:  req.Subject,
-			Body:     req.Body,
-			BodyType: req.BodyType,
-		}
-		if err := s.store.EmailTemplate().Create(et); err != nil {
+		if err := s.store.EmailTemplate().Create(req); err != nil {
 			s.error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
 
 		s.logger.Info("Email template created")
-		s.respond(w, r, http.StatusCreated, et)
+		s.respond(w, r, http.StatusCreated, req)
 	}
 }
 
 func (s *server) handleEmailScheduleCreate() http.HandlerFunc {
-	type request struct {
-		EmailTemplateID int       `json:"email_template_id"`
-		Recipients      string    `json:"recipients"`
-		ExecuteAfter    time.Time `json:"execute_after"`
-		ExecutionPeriod *int      `json:"execution_period"`
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &request{}
+		req := &model.EmailSchedule{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 			s.error(w, r, http.StatusBadRequest, err)
 			return
 		}
 
-		executionPeriod := 0
-		if req.ExecutionPeriod != nil {
-			executionPeriod = *req.ExecutionPeriod
-		}
-
-		es := &model.EmailSchedule{
-			EmailTemplateID: req.EmailTemplateID,
-			Recipients:      req.Recipients,
-			ExecuteAfter:    req.ExecuteAfter,
-			ExecutionPeriod: executionPeriod,
-		}
-
-		if err := s.store.EmailSchedule().Create(es); err != nil {
+		if err := s.store.EmailSchedule().Create(req); err != nil {
 			s.error(w, r, http.StatusUnprocessableEntity, err)
 			return
 		}
 
 		s.logger.Infof("Email schedule created to be executed after %v", req.ExecuteAfter)
-		s.respond(w, r, http.StatusCreated, es)
+		s.respond(w, r, http.StatusCreated, req)
 	}
 }
 
@@ -106,7 +76,7 @@ func (s *server) handleEmailTemplateGet() http.HandlerFunc {
 
 func (s *server) sendEmail(req *model.Message) {
 	m := gomail.NewMessage()
-	m.SetHeader("From", app.GetEnvString("SMTP_FROM", "noreply@localhost"))
+	m.SetHeader("From", app.GetValue("SMTP_FROM", "noreply@localhost").String())
 	m.SetHeader("To", req.To...)
 	m.SetHeader("Cc", req.Cc...)
 	m.SetHeader("Subject", req.Subject)
@@ -164,6 +134,7 @@ func (s *server) startEmailScheduler() {
 				s.logger.Error(err)
 				continue
 			}
+			s.logger.Debugf("Checking for email schedules. Found %d schedules", len(schedules))
 
 			for _, schedule := range schedules {
 				template, err := s.store.EmailTemplate().FindByID(schedule.EmailTemplateID)

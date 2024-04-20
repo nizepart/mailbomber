@@ -78,7 +78,7 @@ func (s *server) configureRouter() {
 }
 
 func (s *server) configureLogger() error {
-	level, err := logrus.ParseLevel(app.GetEnvString("LOG_LEVEL", "debug"))
+	level, err := logrus.ParseLevel(app.GetValue("LOG_LEVEL", "debug").String())
 	if err != nil {
 		return err
 	}
