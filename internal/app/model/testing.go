@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nizepart/rest-go/internal/app"
+	"github.com/nizepart/mailbomber/internal/app"
 )
 
 func TestUser(t *testing.T) *User {

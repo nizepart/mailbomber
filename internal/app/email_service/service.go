@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/nizepart/rest-go/internal/app"
+	"github.com/nizepart/mailbomber/internal/app"
 	"gopkg.in/gomail.v2"
 )
 

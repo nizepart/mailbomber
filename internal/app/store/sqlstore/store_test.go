@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/nizepart/rest-go/internal/app"
+	"github.com/nizepart/mailbomber/internal/app"
 )
 
 var (

@@ -4,7 +4,7 @@ import (
 	"database/sql"
 
 	_ "github.com/lib/pq"
-	"github.com/nizepart/rest-go/internal/app/store"
+	"github.com/nizepart/mailbomber/internal/app/store"
 )
 
 type Store struct {

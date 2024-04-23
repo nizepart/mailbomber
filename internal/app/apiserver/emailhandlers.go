@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/nizepart/rest-go/internal/app"
-	"github.com/nizepart/rest-go/internal/app/model"
+	"github.com/nizepart/mailbomber/internal/app"
+	"github.com/nizepart/mailbomber/internal/app/model"
 	"gopkg.in/gomail.v2"
 )
 

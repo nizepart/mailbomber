@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nizepart/rest-go/internal/app/model"
+	"github.com/nizepart/mailbomber/internal/app/model"
 	"github.com/stretchr/testify/assert"
 )
 

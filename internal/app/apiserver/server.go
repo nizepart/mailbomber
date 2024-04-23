@@ -11,9 +11,9 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
-	"github.com/nizepart/rest-go/internal/app"
-	"github.com/nizepart/rest-go/internal/app/email_service"
-	"github.com/nizepart/rest-go/internal/app/store"
+	"github.com/nizepart/mailbomber/internal/app"
+	"github.com/nizepart/mailbomber/internal/app/email_service"
+	"github.com/nizepart/mailbomber/internal/app/store"
 	"github.com/sirupsen/logrus"
 )
 
