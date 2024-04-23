@@ -8,7 +8,7 @@
 **Request JSON example:**
 ```json
 { 
-    "username": "<username>",
+    "email": "<username>",
     "password": "<password>"
 }
 ```
@@ -21,7 +21,7 @@
 **Request JSON example:**
 ```json
 {
-    "username": "<username>",
+    "email": "<username>",
     "password": "<password>"
 } 
 ```
