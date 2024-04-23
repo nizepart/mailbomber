@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/nizepart/rest-go/internal/app/apiserver"
+	"github.com/nizepart/mailbomber/internal/app/apiserver"
 )
 
 func main() {

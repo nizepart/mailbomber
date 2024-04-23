@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/nizepart/rest-go/internal/app/model"
+	"github.com/nizepart/mailbomber/internal/app/model"
 )
 
 type EmailScheduleRepository struct {

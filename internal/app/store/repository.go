@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/nizepart/rest-go/internal/app/model"
+	"github.com/nizepart/mailbomber/internal/app/model"
 )
 
 type UserRepository interface {

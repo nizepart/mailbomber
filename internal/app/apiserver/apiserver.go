@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/sessions"
-	"github.com/nizepart/rest-go/internal/app"
-	"github.com/nizepart/rest-go/internal/app/store/sqlstore"
+	"github.com/nizepart/mailbomber/internal/app"
+	"github.com/nizepart/mailbomber/internal/app/store/sqlstore"
 )
 
 func Start() error {

@@ -3,8 +3,8 @@ package teststore_test
 import (
 	"testing"
 
-	"github.com/nizepart/rest-go/internal/app/model"
-	"github.com/nizepart/rest-go/internal/app/store/teststore"
+	"github.com/nizepart/mailbomber/internal/app/model"
+	"github.com/nizepart/mailbomber/internal/app/store/teststore"
 	"github.com/stretchr/testify/assert"
 )
 

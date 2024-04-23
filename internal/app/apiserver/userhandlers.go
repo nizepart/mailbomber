@@ -6,7 +6,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/nizepart/rest-go/internal/app/model"
+	"github.com/nizepart/mailbomber/internal/app/model"
 )
 
 const (

@@ -7,7 +7,7 @@ import (
 
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
-	"github.com/nizepart/rest-go/internal/app"
+	"github.com/nizepart/mailbomber/internal/app"
 )
 
 func requiredIf(cond bool) validation.RuleFunc {
